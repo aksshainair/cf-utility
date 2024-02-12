@@ -1,9 +1,7 @@
 import typer
-
-from functions import get_problem_by_tag, get_position, get_problems_to_practice, parse_contest, standings_row_extraction
+from cf_u.functions import *
 
 app = typer.Typer()
-
 
 @app.command(short_help='returns the problems and links of the specified tag')
 def tag(tag: str):
@@ -11,7 +9,7 @@ def tag(tag: str):
 
 @app.command(short_help="returns a list of 11 users, with 5 above and below of the requested user's position in the rank")
 def whereis(username: str):
-    get_position(username)
+   get_position(username)
 
 @app.command(short_help="returns a list of problems to practice in the range +- 200 rank of the user")
 def practice(username: str):
@@ -24,6 +22,3 @@ def parse(contest_id: str, extension: str):
 @app.command(short_help="")
 def acceptance(contest_id: str):
     standings_row_extraction(contest_id)
-
-if __name__ == "__main__":
-    app()
