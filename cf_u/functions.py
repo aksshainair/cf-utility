@@ -134,7 +134,7 @@ def parse_contest(contest_id: int, extension: str):
         exit()
 
     extension = '.' + extension
-    contest_url = contest_url + contest_id
+    contest_url = contest_url + str(contest_id)
     print(contest_url)
 
     page = requests.get(contest_url, verify = True)
@@ -158,11 +158,6 @@ def parse_contest(contest_id: int, extension: str):
     #extract the datatable 
     problems = soup.find('div', attrs={"class":"datatable"}).find('table').findAll('a')
 
-    #template-parse
-    fname = open('template.txt', "r")
-    template_txt = fname.read().strip()
-    fname.close()
-
     #create the problem folder
     os.mkdir(folder_name)
 
@@ -177,7 +172,7 @@ def parse_contest(contest_id: int, extension: str):
         prob_no = problems[i].text.strip()
         prob_name = problems[i+1].text.strip()
         prob_x.append(prob_no)
-        create_problem_folder(prob_no,prob_name,contest_problem_url,folder_name,extension,template_txt,contest_id)
+        create_problem_folder(prob_no,prob_name,contest_problem_url,folder_name,extension,contest_id)
 
 
 

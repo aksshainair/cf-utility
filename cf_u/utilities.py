@@ -174,7 +174,7 @@ def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contes
     fname.close()    
 
 #f Create problem folders 
-def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,extension,template_txt,contest_id):
+def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,extension,contest_id):
     print(prob_no,prob_name, "\nExtracting ......")
     contest_problem_url = contest_problem_url +  prob_no
     print(contest_problem_url, "is being parsed .....")
@@ -191,7 +191,7 @@ def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,ext
     file1 = prob_no + extension
     file1 = os.path.join(prob_folder_name,file1)
     fname = open(file1,"a")
-    fname.write(template_txt)
+    fname.write(f"{prob_name}")
     fname.close()
 
     print("\nGetting i/o for {} {}".format(prob_no,prob_name))
@@ -206,7 +206,6 @@ def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,ext
     # fname.close()
 
     print("Done\n\n")
-    # time.sleep(5)
 
 #f Function to get the folder_name 
 def get_folder_name(contest_name):
