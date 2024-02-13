@@ -10,7 +10,12 @@ console = Console()
 
 def fetch_user_data(num_users=50):
     url = f'https://codeforces.com/api/user.ratedList?activeOnly=true'
-    response = requests.get(url)
+    
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+            console.print(f'[bold red]Error: Unable to fetch data. Try Again later or check you connection[/ bold red]')
+            exit()
 
     if response.status_code == 200:
         data = response.json()
@@ -25,12 +30,15 @@ def fetch_user_data(num_users=50):
                 user_data['User'].append(user['handle'])
                 user_data['Rating'].append(user['rating'])
                 user_data['ProblemsSolved'].append(user['contribution'])
-
             return user_data
         else:
             print(f"Error: {data['comment']}")
     else:
         print(f"Error: Unable to fetch data (HTTP status code {response.status_code})")
+        return []
+
+
+    
 
     return None
 
@@ -55,20 +63,22 @@ def get_user_info(username):
 
     try:
         response = requests.get(api_url)
+
+        if response.status_code == 400:
+            console.print('[bold red]Error: Bad request. Please check your input.[/ bold red]')
+            exit()
         response.raise_for_status()
-
+        
         user_info = response.json()
-
         if user_info['status'] == 'OK':
             return user_info['result'][0]
         else:
             print(f"Error: {user_info['comment']}")
 
     except requests.exceptions.RequestException as e:
-        console.print('[bold red]Error: Unable to connect. Try again later, or check your connection[/ bold red]')
+        console.print(f'[bold red]Error: Unable to fetch data. Try Again later or check you connection[/ bold red]')
         exit()
 
-    return None
 
 def get_user_solved_problems(username):
     submissions_url = f'https://codeforces.com/api/user.status?handle={username}&from=1&count=100000'
@@ -88,7 +98,7 @@ def get_user_solved_problems(username):
         return solved_problems
 
     except requests.exceptions.RequestException as e:
-        print(f"Error: Try again Later")
+        console.print(f"[bold yellow]Warning: Unable to get solved problems[/ bold yellow]")
         return set()
 
 def get_user_current_rating(username):
@@ -148,7 +158,7 @@ def get_extension():
     return hash[int(language)]
 
 #f Extract i/o statements for the problem 
-def get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id):
+def get_contest_io(prob_folder_name,prob_no,contest_id):
     file2 = prob_no + ".txt"
     file2 = os.path.join(prob_folder_name,file2)
     fname = open(file2, "a")
@@ -196,7 +206,7 @@ def create_problem_folder(prob_no, prob_name,contest_problem_url,folder_name,ext
 
     print("\nGetting i/o for {} {}".format(prob_no,prob_name))
     
-    get_contest_io(contest_problem_url,prob_folder_name,prob_no,prob_name,contest_id)
+    get_contest_io(prob_folder_name,prob_no,contest_id)
     print("I/O extraction Success !")
 
     # #create the input.txt file for personal input output

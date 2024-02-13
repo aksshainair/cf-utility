@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "cf-u"
 version = "0.1.0"
-description = ""
+description = "A cli tool written in python for codeforces users"
 authors = ["Aksshai Nair <aksshainair.work@gmail.com>"]
 readme = "README.md"
 
